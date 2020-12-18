@@ -1,0 +1,35 @@
+.scroll-bar {
+    -fx-background-color: #d0b8ac;
+}
+.scroll-pane {
+    -fx-background-color: #d0b8ac;
+    -fx-border-color: #d0b8ac;
+}
+.text-area {
+    -fx-background-insets: 0;
+    -fx-background-color: transparent, #d0b8ac, transparent, #d0b8ac;
+}
+
+.text-area .content {
+    -fx-background-color: transparent, #d0b8ac, transparent, #d0b8ac;
+    -fx-background-radius: 0;
+}
+
+.text-area:focused .content {
+    -fx-background-color: transparent, #d0b8ac, transparent, #d0b8ac;
+}
+
+.text-area:focused {
+    -fx-highlight-fill: #7ecfff;
+}
+
+.scroll-pane .content {
+    -fx-background-radius: 0;
+}
+.thumb {
+    -fx-background-color: #d0b8ac;
+    -fx-border-color: #827670;
+}
+.text-area *.text {
+    -fx-text-alignment: center;
+}

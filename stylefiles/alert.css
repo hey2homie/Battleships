@@ -1,0 +1,9 @@
+.myDialog{
+    -fx-background-color: #d0b8ac;
+}
+.myDialog > *.label.content{
+    -fx-font-size: 30px;
+    -fx-font-family: Avenir;
+    -fx-text-alignment: center;
+    -fx-wrap-text: true;
+}
