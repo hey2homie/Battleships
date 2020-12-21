@@ -52,8 +52,7 @@ public class Utilities {
          */
 
         DialogPane dialogPane = alert.getDialogPane();
-        dialogPane.getStylesheets().add(
-                Utilities.class.getResource("../../stylefiles/alert.css").toExternalForm());
+        dialogPane.getStylesheets().add(Utilities.class.getResource("../../stylefiles/alert.css").toExternalForm());
         dialogPane.getStyleClass().add("myDialog");
 
         alert.showAndWait();
@@ -153,10 +152,10 @@ public class Utilities {
 
         if (clickAllowance) { // Do nothing if previous click was a fail
 
-            String color;   // Color of the pane
+            String color;   // Color of the pane. Not initialised since Strings are immutable. Can use StringBuilder...
 
             if (board[rowIndex][colIndex] == 1) {
-                color = "-fx-background-color: red;";
+                color = "-fx-background-color: red; -fx-border-color: #827670";
                 if (number == 1) {
                     Players.takeDamagePlayer2();
                     Players.initialBoardPlayer2[rowIndex][colIndex] = 3;    // To avoid hitting at the same time
@@ -168,16 +167,16 @@ public class Utilities {
                 }
             } else if (board[rowIndex][colIndex] != 3) {
                 if (Players.HEALTH_PLAYER2 != 0 && Players.HEALTH_PLAYER1 != 0) {
-                    color = "-fx-background-color: blue;";
+                    color = "-fx-background-color: blue; -fx-border-color: #827670";
                     setClickAllowance(false);   // Preventing future clicks after failed attempt to hit battleship
                     if (number == 1) {
                         mishitsPlayer1 += 1;
                         Players.initialBoardPlayer2[rowIndex][colIndex] = 3;
-                        addMoves(textArea, textPlayer2, previousText2 + "Mishit ", rowIndex, colIndex);
+                        addMoves(textArea, textPlayer2, previousText2 + "Miss ", rowIndex, colIndex);
                     } else {
                         mishitsPlayer2 += 1;
                         Players.initialBoardPlayer1[rowIndex][colIndex] = 3;
-                        addMoves(textArea, textPlayer1, previousText1 + "Mishit ", rowIndex, colIndex);
+                        addMoves(textArea, textPlayer1, previousText1 + "Miss ", rowIndex, colIndex);
                     }
                 } else {
                     color = "";
@@ -309,7 +308,9 @@ public class Utilities {
     }
 
     public static void addMoves(TextArea textArea1, TextArea textArea2, String previousText, int i, int j) {
-        textArea1.setText(previousText + i + ":" + j + "\n");
-        textArea2.setText(previousText + i + ":" + j + "\n");
+        int row = i + 1;    // Not to show zero indexes
+        int col = j + 1;
+        textArea1.setText(previousText + row + ":" + col + "\n");
+        textArea2.setText(previousText + row + ":" + col + "\n");
     }
 }

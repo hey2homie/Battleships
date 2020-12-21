@@ -23,7 +23,7 @@
                 <Font name="Avenir Book" size="30.0" />
             </font>
         </Label>
-        <Button fx:id="nextPlayer2" layoutX="0.0" layoutY="691.0" mnemonicParsing="false" onAction="#toPlayer2Move" style="-fx-background-color: null;" text="Next Player" textAlignment="CENTER" wrapText="true">
+        <Button fx:id="nextPlayer2" layoutX="407.0" layoutY="681.0" mnemonicParsing="false" onAction="#toPlayer2Move" style="-fx-background-color: null;" text="Next Player" textAlignment="CENTER" wrapText="true">
             <font>
                 <Font name="Avenir Book" size="30.0" />
             </font>
