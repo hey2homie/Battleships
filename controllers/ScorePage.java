@@ -22,11 +22,11 @@ public class ScorePage implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        name.setText("Congratulations," + Utilities.winner + "!");
+        name.setText("Congratulations, " + Utilities.winner + "!");
         String settings = Utilities.usedSettings;
         String scores = settings.equals("timing") ? Utilities.timePlayer1 + ":" + Utilities.timePlayer2 :
                 Utilities.mishitsPlayer1 + ":" + Utilities.mishitsPlayer2;
-        score.setText("You won with the following amount of " + settings + ": " + scores);
+        score.setText("You won with the following amount of " + settings + scores);
     }
 
     @FXML

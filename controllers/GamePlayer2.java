@@ -38,12 +38,16 @@ public class GamePlayer2 implements Initializable {
 
     @FXML
     private void toPlayer1Move(ActionEvent event) throws IOException {
-        if (Players.HEALTH_PLAYER1 == 0) {
-            Utilities.winner = Players.getNamePlayer2();
-            Utilities.changeScene(event, "../../stylefiles/score.fxml");
+        if (!Utilities.clickAllowance) {
+            if (Players.HEALTH_PLAYER1 == 0) {
+                Utilities.winner = Players.getNamePlayer2();
+                Utilities.changeScene(event, "../../stylefiles/score.fxml");
+            } else {
+                Utilities.nextMove(2, gridPane, timer);
+                Utilities.changeScene(event, "../../stylefiles/game1.fxml");
+            }
         } else {
-            Utilities.nextMove(2, gridPane, timer);
-            Utilities.changeScene(event, "../../stylefiles/game1.fxml");
+            Utilities.raiseAlert("You can make a move! Why don't you use this opportunity?");
         }
     }
 

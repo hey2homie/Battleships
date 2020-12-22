@@ -19,8 +19,8 @@
                 <Font name="Avenir Book" size="82.0" />
             </font>
         </Label>
-        <GridPane fx:id="gridPane1" gridLinesVisible="true" layoutX="14.0" layoutY="198.0" prefHeight="453.0"
-                  prefWidth="643.0">
+        <GridPane fx:id="gridPane1" gridLinesVisible="true" layoutX="14.0" layoutY="198.0" prefHeight="450.0"
+                  prefWidth="650.0">
             <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -51,7 +51,7 @@
                 <Font name="Avenir Book" size="30.0" />
             </font>
         </Label>
-        <Button fx:id="beginGame" onAction="#beginGame" layoutY="691.0" mnemonicParsing="false"
+        <Button fx:id="beginGame" onAction="#beginGame" layoutX="407.0" layoutY="681.0" mnemonicParsing="false"
                 style="-fx-background-color: null;" text="Begin Game?" textAlignment="CENTER" wrapText="true">
             <font>
                 <Font name="Avenir Book" size="30.0" />

@@ -60,13 +60,12 @@ public class Utilities {
 
     public static void fillRandomly(GridPane gridpane, int number) {
         int[][] board = randomPlacement();
-
         gridpane.getChildren().retainAll(gridpane.getChildren().get(0)); // Remove nodes when replacing random placement
 
         for (int i = 0; i < 10; i++) {
             for (int j = 0; j < 10; j++) {
                 Pane pane = new Pane();
-                String color = board[i][j] == 1 ? "-fx-background-color: red;" : "-fx-background-color: null;";
+                String color = board[i][j] == 1 ? "-fx-background-color: #f44336;" : "-fx-background-color: null;";
                 pane.setStyle(color);
                 gridpane.add(pane, j, i);
             }
@@ -94,8 +93,10 @@ public class Utilities {
                 pane.setStyle("-fx-background-color: null;");
                 if (number == 1) {
                     Players.gameBoardPlayer1.add(pane, j, i);
-                } else {
+                } else if (number == 2) {
                     Players.gameBoardPlayer2.add(pane, j, i);
+                } else {
+                    gridpane.add(pane, j, i);
                 }
             }
         }
@@ -120,7 +121,6 @@ public class Utilities {
 
     public static void nextMove(int number, GridPane gridPane, Timing timer) {
         timer.stop();
-
         setClickAllowance(true);
 
         if (number == 1) {
@@ -213,7 +213,7 @@ public class Utilities {
                 /*
                 Placing ships starting from the biggest to avoid difficulties with placing big ships when board is
                 filled
-                */
+                 */
 
                 if (i < 1) {
                     lengthOfBattleship = 4;
@@ -258,40 +258,52 @@ public class Utilities {
                             o = row;
                             l = column + k;
                         }
+
                         /*
                         This blocks are to avoid Index out of Range when placing cells which are occupied with ship
                         boarder
+                        // TODO: Simplify it like in the addUnavailableCells method
+
                          */
+
                         try {
                             if (board[o][l - 1] != 1) {
                                 board[o][l - 1] = 2;
                             }
-                        } catch (Exception ignored) { }
+                        } catch (Exception ignored) {
+                        }
                         try {
-                            if (board[o - 1][l] != 1){
+                            if (board[o - 1][l] != 1) {
                                 board[o - 1][l] = 2;
                             }
-                        } catch (Exception ignored) { }
+                        } catch (Exception ignored) {
+                        }
                         try {
                             if (board[o + 1][l] != 1) {
                                 board[o + 1][l] = 2;
                             }
-                        } catch (Exception ignored) { }
+                        } catch (Exception ignored) {
+                        }
                         try {
                             board[o - 1][l - 1] = 2;
-                        } catch (Exception ignored) { }
+                        } catch (Exception ignored) {
+                        }
                         try {
                             board[o + 1][l - 1] = 2;
-                        } catch (Exception ignored) { }
+                        } catch (Exception ignored) {
+                        }
                         try {
                             board[o + 1][l + 1] = 2;
-                        } catch (Exception ignored) { }
+                        } catch (Exception ignored) {
+                        }
                         try {
                             board[o][l + 1] = 2;
-                        } catch (Exception ignored) { }
+                        } catch (Exception ignored) {
+                        }
                         try {
                             board[o - 1][l + 1] = 2;
-                        } catch (Exception ignored) { }
+                        } catch (Exception ignored) {
+                        }
 
                         if (isHorizontal) {
                             board[row + k][column] = 1;
@@ -308,9 +320,204 @@ public class Utilities {
     }
 
     public static void addMoves(TextArea textArea1, TextArea textArea2, String previousText, int i, int j) {
+
+        /*
+        Add history of moves to the TextArea in game
+         */
+
         int row = i + 1;    // Not to show zero indexes
         int col = j + 1;
         textArea1.setText(previousText + row + ":" + col + "\n");
         textArea2.setText(previousText + row + ":" + col + "\n");
+    }
+
+    public static void addUnavailableCells(int[][] board, int row, int column, int length, boolean vertical) {
+
+        /*
+        In this method we resolving the issue of ships collision and don't allow them to occupy ships surroundings.
+        I know that it's not the best way to approaches this but I can't find another one
+         */
+
+        if (length == 0) {
+            for (int i = -1; i < 2; i++) {
+                for (int j = -1; j < 2; j++) {
+                    try {
+                        board[row + i][column + j] = 2;
+                    } catch (Exception ignored) {
+                    }
+                }
+            }
+            board[row][column] = 1;
+        }
+        if (!vertical) {
+            if (length == 1) {
+                for (int i = -1; i < 2; i++) {
+                    for (int j = -1; j < 3; j++) {
+                        try {
+                            board[row + i][column + j] = 2;
+                        } catch (Exception ignored) {
+                        }
+                    }
+                }
+                board[row][column] = 1;
+                board[row][column + 1] = 1;
+            } else if (length == 2) {
+                for (int i = -1; i < 2; i++) {
+                    for (int j = -1; j < 4; j++) {
+                        try {
+                            board[row + i][column + j] = 2;
+                        } catch (Exception ignored) {
+                        }
+                    }
+                }
+                board[row][column] = 1;
+                board[row][column + 1] = 1;
+                board[row][column + 2] = 1;
+            } else if (length == 3) {
+                for (int i = -1; i < 2; i++) {
+                    for (int j = -1; j < 5; j++) {
+                        try {
+                            board[row + i][column + j] = 2;
+                        } catch (Exception ignored) {
+                        }
+                    }
+                }
+                board[row][column] = 1;
+                board[row][column + 1] = 1;
+                board[row][column + 2] = 1;
+                board[row][column + 3] = 1;
+            }
+        } else {
+            if (length == 1) {
+                for (int i = -1; i < 3; i++) {
+                    for (int j = -1; j < 2; j++) {
+                        try {
+                            board[row + i][column + j] = 2;
+                        } catch (Exception ignored) {
+                        }
+                    }
+                }
+                board[row][column] = 1;
+                board[row + 1][column] = 1;
+            } else if (length == 2) {
+                for (int i = -1; i < 4; i++) {
+                    for (int j = -1; j < 2; j++) {
+                        try {
+                            board[row + i][column + j] = 2;
+                        } catch (Exception ignored) {
+                        }
+                    }
+                }
+                board[row][column] = 1;
+                board[row + 1][column] = 1;
+                board[row + 2][column] = 1;
+            } else if (length == 3){
+                for (int i = -1; i < 5; i++) {
+                    for (int j = -1; j < 2; j++) {
+                        try {
+                            board[row + i][column + j] = 2;
+                        } catch (Exception ignored) {
+                        }
+                    }
+                }
+                board[row][column] = 1;
+                board[row + 1][column] = 1;
+                board[row + 2][column] = 1;
+                board[row + 3][column] = 1;
+            }
+        }
+    }
+
+    public static void addShipsToGrid(GridPane gridPane, boolean vertical, int length, Pane pane, int column, int row) {
+
+        /*
+        Add colored panes to the grid in the placement stage depending on the ship orientation
+         */
+
+        if (!vertical) {
+            gridPane.add(pane, column, row, 1 + length, 1);
+        } else {
+            gridPane.add(pane, column, row, 1, 1 + length);
+        }
+    }
+
+    public static boolean canPlace(int[][] board, int length, int column, int row, boolean vertical) {
+
+        /*
+        In this method we are looking whether the ship can be added to this location or not to avoid possible collisions
+        and occupation of other ships surroundings. If we can place ship to that location, then we return true, and vice
+        versa.
+        Also seems that I found not the most optimal solution for this part
+         */
+
+        boolean condition = false;
+        if (length == 0) {
+            if (board[row][column] != 1 && board[row][column] != 2) {
+                condition = true;
+            }
+        }
+        try {
+            if (!vertical) {
+                if (length == 1) {
+                    if (board[row][column] != 1 && board[row][column] != 2 && board[row][column + 1] != 1 &&
+                            board[row][column + 1] != 2) {
+                        condition = true;
+                    }
+                } else if (length == 2) {
+                    if (board[row][column] != 1 && board[row][column] != 2 && board[row][column + 1] != 1 &&
+                            board[row][column + 1] != 2 && board[row][column + 2] != 1 && board[row][column + 2] != 2) {
+                        condition = true;
+                    }
+                } else if (length == 3) {
+                    if (board[row][column] != 1 && board[row][column] != 2 && board[row][column + 1] != 1 &&
+                            board[row][column + 1] != 2 && board[row][column + 2] != 1 && board[row][column + 2] != 2 &&
+                            board[row][column + 3] != 1 && board[row][column + 3] != 3) {
+                        condition = true;
+                    }
+                }
+            } else {
+                if (length == 1) {
+                    if (board[row][column] != 1 && board[row][column] != 2 && board[row + 1][column] != 1 &&
+                            board[row + 1][column] != 2 && board[row + 1][column] <= 9) {
+                        condition = true;
+                    }
+                } else if (length == 2) {
+                    if (board[row][column] != 1 && board[row][column] != 2 && board[row + 1][column] != 1 &&
+                            board[row + 1][column] != 2 && board[row + 2][column] != 1 && board[row + 2][column] != 2 &&
+                            board[row + 2][column] <= 9) {
+                        condition = true;
+                    }
+                } else if (length == 3) {
+                    if (board[row][column] != 1 && board[row][column] != 2 && board[row + 1][column] != 1 &&
+                            board[row + 1][column] != 2 && board[row + 2][column] != 1 && board[row + 2][column] != 2 &&
+                            board[row + 3][column] != 1 && board[row + 3][column] != 2) {
+                        condition = true;
+                    }
+                }
+            }
+        } catch (Exception ignored) { }
+        return condition;
+    }
+
+    public static void restoreAfterRandomPlacement(int number, Label label1, Label label2, Label label3, Label label4) {
+        if (number == 1) {
+            Players.initialBoardPlayer1 = new int[10][10];
+            Players.SHIPS_AVAILABLE_PLAYER1 = 10;
+            Players.SHIP1X1PLAYER1 = 4;
+            Players.SHIP2X1PLAYER1 = 3;
+            Players.SHIP3X1PLAYER1 = 2;
+            Players.SHIP4X1PLAYER1 = 1;
+        } else {
+            Players.initialBoardPlayer2 = new int[10][10];
+            Players.SHIPS_AVAILABLE_PLAYER2 = 10;
+            Players.SHIP1X1PLAYER2 = 4;
+            Players.SHIP2X1PLAYER2 = 3;
+            Players.SHIP3X1PLAYER2 = 2;
+            Players.SHIP4X1PLAYER2 = 1;
+        }
+        label1.setText("4");
+        label2.setText("3");
+        label3.setText("2");
+        label4.setText("1");
     }
 }

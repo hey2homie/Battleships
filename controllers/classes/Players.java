@@ -4,12 +4,13 @@ import javafx.scene.layout.GridPane;
 
 public class Players {
 
-
     public static String namePlayer1 = null;
     public static String namePlayer2 = null;
 
     public static int HEALTH_PLAYER1 = 20;
     public static int HEALTH_PLAYER2 = 20;
+    public static int SHIPS_AVAILABLE_PLAYER1 = 10;
+    public static int SHIPS_AVAILABLE_PLAYER2 = 10;
 
     public static int SHIP1X1PLAYER1 = 4;
     public static int SHIP1X1PLAYER2 = 4;
@@ -20,8 +21,8 @@ public class Players {
     public static int SHIP4X1PLAYER1 = 1;
     public static int SHIP4X1PLAYER2 = 1;
 
-    public static int[][] initialBoardPlayer1;
-    public static int[][] initialBoardPlayer2;
+    public static int[][] initialBoardPlayer1 = new int[10][10];
+    public static int[][] initialBoardPlayer2 = new int[10][10];
 
     public static GridPane gameBoardPlayer1;
     public static GridPane gameBoardPlayer2;

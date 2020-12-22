@@ -8,7 +8,7 @@
 <AnchorPane id="AnchorPane" prefHeight="200" prefWidth="320" xmlns:fx="http://javafx.com/fxml/1"
             xmlns="http://javafx.com/javafx/11.0.1" fx:controller="controllers.BeginPage">
     <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0"
-          prefWidth="1024.0" style="-fx-background-color: #d0b8ac#d0b8ac;" xmlns="http://javafx.com/javafx/11.0.1">
+          prefWidth="1024.0" style="-fx-background-color: #d0b8ac;" xmlns="http://javafx.com/javafx/11.0.1">
         <Button fx:id="begin" alignment="CENTER" layoutX="248.0" layoutY="297.0" mnemonicParsing="false"
                 onAction="#toSettings" prefHeight="174.0" prefWidth="528.0" style="-fx-background-color: null;"
                 text="New Game">

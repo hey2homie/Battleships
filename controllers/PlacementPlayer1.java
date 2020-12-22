@@ -43,16 +43,22 @@ public class PlacementPlayer1 implements Initializable {
 
     int shipDims;
     boolean vertical = false;
+    boolean setRandomly = false;
 
     @FXML
     private void toPlayer2(ActionEvent event) throws IOException {
-        Utilities.prepareBoards(gridPane1, 1);
-        Utilities.changeScene(event, "../../stylefiles/placement2.fxml");
+        if (Players.SHIPS_AVAILABLE_PLAYER1 == 0 || setRandomly) {
+            Players.gameBoardPlayer1 = gridPane1;
+            Utilities.prepareBoards(gridPane1, 1);
+            Utilities.changeScene(event, "../../stylefiles/placement2.fxml");
+        } else {
+            Utilities.raiseAlert("You didn't put all ships to board!");
+            System.out.println(Players.SHIPS_AVAILABLE_PLAYER1);
+        }
     }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
         orientation.getStylesheets().add(Utilities.class.getResource(
                 "../../stylefiles/checkBox.css").toExternalForm());
 
@@ -139,44 +145,71 @@ public class PlacementPlayer1 implements Initializable {
 
         gridPane1.setOnDragDropped(event -> {
             Node node = event.getPickResult().getIntersectedNode();
+            boolean conditionsForPlacement;
+
             if (node != gridPane1) {
+                if (setRandomly) {
+                    setRandomly = false;
+                    Utilities.prepareBoards(gridPane1, 3);
+                    Utilities.restoreAfterRandomPlacement(1, ship1x1, ship2x1, ship3x1, ship4x1);
+                }
                 Integer cIndex = GridPane.getColumnIndex(node);
                 Integer rIndex = GridPane.getRowIndex(node);
                 int x = cIndex == null ? 0 : cIndex;
                 int y = rIndex == null ? 0 : rIndex;
 
                 Pane pane = new Pane();
-                pane.setStyle("-fx-background-color: red; -fx-border-color: #827670");
-
-                if (!vertical) {
-                    gridPane1.add(pane, x, y, 1 + shipDims, 1);
-                } else {
-                    gridPane1.add(pane, x, y, 1, 1 + shipDims);
-                }
+                pane.setStyle("-fx-background-color: #f44336; -fx-border-color: #827670");
 
                 if (shipDims == 0) {
-                    Players.SHIP1X1PLAYER1--;
-                    ship1x1.setText(String.valueOf(Players.SHIP1X1PLAYER1));
-                    if (Players.SHIP1X1PLAYER1 == 0) {
-                        ships[shipDims].setVisible(false);
+                    conditionsForPlacement = Utilities.canPlace(Players.initialBoardPlayer1, shipDims, x, y, vertical);
+                    if (conditionsForPlacement) {
+                        if (Players.initialBoardPlayer1[y][x] != 1 && Players.initialBoardPlayer1[y][x] != 2) {
+                            Players.SHIP1X1PLAYER1--;
+                            ship1x1.setText(String.valueOf(Players.SHIP1X1PLAYER1));
+                            if (Players.SHIP1X1PLAYER1 == 0) {
+                                ships[shipDims].setVisible(false);
+                            }
+                            Utilities.addUnavailableCells(Players.initialBoardPlayer1, y, x, shipDims, vertical);
+                            Utilities.addShipsToGrid(gridPane1, vertical, shipDims, pane, x, y);
+                            Players.SHIPS_AVAILABLE_PLAYER1--;
+                        }
                     }
                 } else if (shipDims == 1) {
-                    Players.SHIP2X1PLAYER1--;
-                    ship2x1.setText(String.valueOf(Players.SHIP2X1PLAYER1));
-                    if (Players.SHIP2X1PLAYER1 == 0) {
-                        ships[shipDims].setVisible(false);
+                    conditionsForPlacement = Utilities.canPlace(Players.initialBoardPlayer1, shipDims, x, y, vertical);
+                    if (conditionsForPlacement) {
+                        Players.SHIP2X1PLAYER1--;
+                        ship2x1.setText(String.valueOf(Players.SHIP2X1PLAYER1));
+                        if (Players.SHIP2X1PLAYER1 == 0) {
+                            ships[shipDims].setVisible(false);
+                        }
+                        Utilities.addUnavailableCells(Players.initialBoardPlayer1, y, x, shipDims, vertical);
+                        Utilities.addShipsToGrid(gridPane1, vertical, shipDims, pane, x, y);
+                        Players.SHIPS_AVAILABLE_PLAYER1--;
                     }
                 } else if (shipDims == 2) {
-                    Players.SHIP3X1PLAYER1--;
-                    ship3x1.setText(String.valueOf(Players.SHIP3X1PLAYER1));
-                    if (Players.SHIP3X1PLAYER1 == 0) {
-                        ships[shipDims].setVisible(false);
+                    conditionsForPlacement = Utilities.canPlace(Players.initialBoardPlayer1, shipDims, x, y, vertical);
+                    if (conditionsForPlacement) {
+                        Players.SHIP3X1PLAYER1--;
+                        ship3x1.setText(String.valueOf(Players.SHIP3X1PLAYER1));
+                        if (Players.SHIP3X1PLAYER1 == 0) {
+                            ships[shipDims].setVisible(false);
+                        }
+                        Utilities.addUnavailableCells(Players.initialBoardPlayer1, y, x, shipDims, vertical);
+                        Utilities.addShipsToGrid(gridPane1, vertical, shipDims, pane, x, y);
+                        Players.SHIPS_AVAILABLE_PLAYER1--;
                     }
                 } else {
-                    Players.SHIP4X1PLAYER1--;
-                    ship4x1.setText(String.valueOf(Players.SHIP4X1PLAYER1));
-                    if (Players.SHIP4X1PLAYER1 == 0) {
-                        ships[shipDims].setVisible(false);
+                    conditionsForPlacement = Utilities.canPlace(Players.initialBoardPlayer1, shipDims, x, y, vertical);
+                    if (conditionsForPlacement) {
+                        Players.SHIP4X1PLAYER1--;
+                        ship4x1.setText(String.valueOf(Players.SHIP4X1PLAYER1));
+                        if (Players.SHIP4X1PLAYER1 == 0) {
+                            ships[shipDims].setVisible(false);
+                        }
+                        Utilities.addUnavailableCells(Players.initialBoardPlayer1, y, x, shipDims, vertical);
+                        Utilities.addShipsToGrid(gridPane1, vertical, shipDims, pane, x, y);
+                        Players.SHIPS_AVAILABLE_PLAYER1--;
                     }
                 }
             }
@@ -184,10 +217,16 @@ public class PlacementPlayer1 implements Initializable {
         });
     }
 
+    @FXML
     public void SetRandomly1() {
+        Players.initialBoardPlayer1 = new int[10][10];
         Utilities.fillRandomly(gridPane1, 1);
+        Players.SHIPS_AVAILABLE_PLAYER1 = 0;
+        setRandomly = true;
+        Utilities.restoreAfterRandomPlacement(1, ship1x1, ship2x1, ship3x1, ship4x1);
     }
 
+    @FXML
     public void setVertical() {
         this.vertical = orientation.isSelected();
     }

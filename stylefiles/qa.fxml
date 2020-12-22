@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.net.URL?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
@@ -14,21 +15,23 @@
          xmlns:fx="http://javafx.com/fxml/1">
       <Label layoutX="51.0" prefHeight="174.0" prefWidth="528.0" text="How to play?">
          <font>
-            <Font name="Avenir Book" size="82.0"/>
+            <Font name="Avenir Book" size="82.0" />
          </font>
       </Label>
-      <TextField editable="false" layoutX="95.0" layoutY="204.0" prefHeight="361.0" prefWidth="854.0"
-                 style="-fx-background-color: null;" text="This game is easy to play!">
-         <font>
-            <Font name="Avenir Book" size="24.0"/>
-         </font>
-      </TextField>
       <Button id="back" fx:id="back" alignment="CENTER_RIGHT" contentDisplay="TEXT_ONLY" layoutX="728.0" layoutY="594.0"
-              mnemonicParsing="false" onAction="#back" prefHeight="174.0" prefWidth="296.0"
-              style="-fx-background-color: null;" text="Back" textAlignment="RIGHT">
+              mnemonicParsing="false" onAction="#back" prefHeight="174.0" prefWidth="296.0" style="-fx-background-color:
+                              null;" text="Back" textAlignment="RIGHT">
          <font>
-            <Font name="Avenir Book" size="80.0"/>
+            <Font name="Avenir Book" size="80.0" />
          </font>
       </Button>
+      <TextArea editable="false" layoutX="51.0" layoutY="174.0" prefHeight="453.0" prefWidth="922.0" text="Welcome to Battleships! &#10;&#10;In this game, two players are shooting 10x10 board one at a time. The goal is to sink all ten ships of players opponent. When it's your turn, you can shot a cell. If it was successful, the cell becomes red, and you are allowed to shot once again.  Otherwise, the cell will turn blue. &#10;&#10;Before the actual game, players should enter their names and choose settings: scoring system and timer. They do so by clicking on the corresponding text in the settings menu. When both players are ready, each one of them needs to place ships. You can do that either randomly, or by drag and drop option. Important note: when you are putting ships manually, the beginning of the ship will be at the cursor location. If the vertical orientation is set, then the ship will go down from the cursor, otherwise to the left. Once the ship has been placed, there is no turning back! If you are trying to place a ship, but nothing happens, then it means that it occupies cell, which belong to another ship, which is against the roles. Try another location this time!&#10;&#10;When the games begin, players see each other opponents board, and that's it. The game finishes when one of the players has lost all the ships.&#10;&#10;Enjoy! " wrapText="true">
+         <font>
+            <Font name="Avenir Book" size="24.0" />
+         </font>
+         <stylesheets>
+            <URL value="@textArea.css" />
+         </stylesheets>
+      </TextArea>
    </Pane>
 </AnchorPane>

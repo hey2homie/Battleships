@@ -41,7 +41,6 @@ public class SettingsPage implements Initializable{
 
     @FXML
     private void toPlacement(ActionEvent event) throws IOException {
-
         new Players(player1.getText(), player2.getText());
         boolean[] allSet = new boolean[3];
 
