@@ -36,8 +36,13 @@ public class GamePlayer2 implements Initializable {
 
     Timing timer = new Timing(SettingsPage.mills);
 
+    /*
+    Completely the same as GamePlayer1 controller except for the second player and another fxml file
+     */
+
     @FXML
     private void toPlayer1Move(ActionEvent event) throws IOException {
+
         if (!Utilities.clickAllowance) {
             if (Players.HEALTH_PLAYER1 == 0) {
                 Utilities.winner = Players.getNamePlayer2();
@@ -54,6 +59,7 @@ public class GamePlayer2 implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         textArea.setText(Utilities.textPlayer1.getText());
+        Utilities.putScrollBarDown(textArea);
         name.setText(Players.getNamePlayer2());
         Utilities.newMove(pane, 2, timerLabel, timer);
         gridPane.addEventFilter(MouseEvent.MOUSE_CLICKED, eventHandler);

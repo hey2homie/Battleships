@@ -5,10 +5,7 @@ import javafx.event.Event;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.DialogPane;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
@@ -31,7 +28,15 @@ public class Utilities {
     public static String usedSettings;
 
     public static void setClickAllowance(boolean clickAllowance) {
-        Utilities.clickAllowance = clickAllowance;
+        if (Players.HEALTH_PLAYER1 == 0) {
+            Utilities.clickAllowance = false;
+            Utilities.raiseAlert("You won! Press next player button to continue to the score page");
+        } else if (Players.HEALTH_PLAYER2 == 0) {
+            Utilities.clickAllowance = false;
+            Utilities.raiseAlert("You won! Press next player button to continue to the score page");
+        } else {
+            Utilities.clickAllowance = clickAllowance;
+        }
     }
 
     public static void changeScene(Event event, String scene) throws IOException {
@@ -47,9 +52,8 @@ public class Utilities {
         alert.setHeaderText(null);
         alert.setContentText(message);
 
-        /*
-        Since alert is the subclass of dialogs, we are changing the style from the parent class
-         */
+
+        // Since alert is the subclass of dialogs, we are changing the style from the parent class
 
         DialogPane dialogPane = alert.getDialogPane();
         dialogPane.getStylesheets().add(Utilities.class.getResource("../../stylefiles/alert.css").toExternalForm());
@@ -62,6 +66,7 @@ public class Utilities {
         int[][] board = randomPlacement();
         gridpane.getChildren().retainAll(gridpane.getChildren().get(0)); // Remove nodes when replacing random placement
 
+        // Here method prepare boards can be used if we modify it a bit
         for (int i = 0; i < 10; i++) {
             for (int j = 0; j < 10; j++) {
                 Pane pane = new Pane();
@@ -80,7 +85,7 @@ public class Utilities {
         }
     }
 
-    public static void prepareBoards(GridPane gridpane, int number) {
+    public static void prepareBoards(GridPane gridpane) {
 
         /*
         In this method we are adding colorless panes to the grid to make it clickable
@@ -91,13 +96,7 @@ public class Utilities {
             for (int j = 0; j < 10; j++) {
                 Pane pane = new Pane();
                 pane.setStyle("-fx-background-color: null;");
-                if (number == 1) {
-                    Players.gameBoardPlayer1.add(pane, j, i);
-                } else if (number == 2) {
-                    Players.gameBoardPlayer2.add(pane, j, i);
-                } else {
-                    gridpane.add(pane, j, i);
-                }
+                gridpane.add(pane, j, i);
             }
         }
     }
@@ -140,18 +139,18 @@ public class Utilities {
         String previousText1 = null;
         String previousText2 = null;
 
-        if (number == 1) {
-            board = Players.initialBoardPlayer2;
-            previousText2 = textPlayer2.getText();
-        } else {
-            board = Players.initialBoardPlayer1;
-            previousText1 = textPlayer1.getText();
-        }
-
-        Pane pane = new Pane(); // This pane with appropriate color will be added when user clicks on the tile
+        Utilities.putScrollBarDown(textArea);
 
         if (clickAllowance) { // Do nothing if previous click was a fail
 
+            if (number == 1) {
+                board = Players.initialBoardPlayer2;
+                previousText2 = textPlayer2.getText();
+            } else {
+                board = Players.initialBoardPlayer1;
+                previousText1 = textPlayer1.getText();
+            }
+            Pane pane = new Pane(); // This pane with appropriate color will be added when user clicks on the tile
             String color;   // Color of the pane. Not initialised since Strings are immutable. Can use StringBuilder...
 
             if (board[rowIndex][colIndex] == 1) {
@@ -159,14 +158,18 @@ public class Utilities {
                 if (number == 1) {
                     Players.takeDamagePlayer2();
                     Players.initialBoardPlayer2[rowIndex][colIndex] = 3;    // To avoid hitting at the same time
-                    addMoves(textArea, textPlayer2, previousText2 + "Hit ", rowIndex, colIndex);
+                    addMoves(textArea, textPlayer2, previousText2 + displayMessage(2, rowIndex,
+                            colIndex), rowIndex, colIndex);
+                    setClickAllowance(true);
                 } else {
                     Players.takeDamagePlayer1();
                     Players.initialBoardPlayer1[rowIndex][colIndex] = 3;
-                    addMoves(textArea, textPlayer1, previousText1 + "Hit ", rowIndex, colIndex);
+                    setClickAllowance(true);
+                    addMoves(textArea, textPlayer1, previousText1 + displayMessage(1, rowIndex,
+                            colIndex), rowIndex, colIndex);
                 }
             } else if (board[rowIndex][colIndex] != 3) {
-                if (Players.HEALTH_PLAYER2 != 0 && Players.HEALTH_PLAYER1 != 0) {
+                if (Players.HEALTH_PLAYER2 != 0 || Players.HEALTH_PLAYER1 != 0) {
                     color = "-fx-background-color: blue; -fx-border-color: #827670";
                     setClickAllowance(false);   // Preventing future clicks after failed attempt to hit battleship
                     if (number == 1) {
@@ -334,8 +337,8 @@ public class Utilities {
     public static void addUnavailableCells(int[][] board, int row, int column, int length, boolean vertical) {
 
         /*
-        In this method we resolving the issue of ships collision and don't allow them to occupy ships surroundings.
-        I know that it's not the best way to approaches this but I can't find another one
+        In this method we resolving the issue of ships collision and don't allow them to occupy other ships surroundings
+        I know that it's not the best way to approaches this but I can't come up with an alternative
          */
 
         if (length == 0) {
@@ -446,8 +449,7 @@ public class Utilities {
         /*
         In this method we are looking whether the ship can be added to this location or not to avoid possible collisions
         and occupation of other ships surroundings. If we can place ship to that location, then we return true, and vice
-        versa.
-        Also seems that I found not the most optimal solution for this part
+        versa. Also seems that I found not the most optimal solution for this part
          */
 
         boolean condition = false;
@@ -495,7 +497,8 @@ public class Utilities {
                     }
                 }
             }
-        } catch (Exception ignored) { }
+        } catch (Exception ignored) {
+        }
         return condition;
     }
 
@@ -519,5 +522,107 @@ public class Utilities {
         label2.setText("3");
         label3.setText("2");
         label4.setText("1");
+    }
+
+    public static String displayMessage(int number, int row, int column) {
+
+        /*
+        So, it was the last method I've created in this project and during that I realised that It would be so much
+        easier for me if from the beginning the ship was represented by the class with all necessary information about
+        it's surroundings, health, etc. In this case there wouldn't be a need for such nested conditions like below.
+        It's too late to change the whole logic. So, unfortunately
+
+        So, basically in the loop we check whether below/above or on the left/right ships cells still exists (1). If so,
+        we will print Hit, otherwise it'll be Sunk. If there's margin on the way, nothing will happen
+         */
+
+        if (number == 1) {
+            for (int i = 1; i < 3; i++) {   // vertical case
+                try {
+                    if (Players.initialBoardPlayer1[row + i][column] == 1 &&
+                            Players.initialBoardPlayer1[row + 1][column] != 2) {   // This condition is for the margin
+                        return "Hit ";
+                    } else if (Players.initialBoardPlayer1[row - i][column] == 1 &&
+                                    Players.initialBoardPlayer1[row - 1][column] != 2) {   // This one as well
+                        return "Hit ";
+                    }
+                } catch (Exception ignored) {
+                }
+            }
+            for (int i = 1; i < 3; i++) {   // horizontal case
+                try {
+                    if (Players.initialBoardPlayer1[row][column - i] == 1 &&
+                            Players.initialBoardPlayer1[row][column - 1] != 2) {
+                        return "Hit ";
+                    }
+                } catch (Exception ignored) {
+                }
+                try {
+                    if (Players.initialBoardPlayer1[row][column + i] == 1 &&
+                            Players.initialBoardPlayer1[row][column + 1] != 2) {
+                        return "Hit ";
+                    }
+                } catch (Exception ignored) {
+                }
+            }
+        } else {
+            for (int i = 1; i < 3; i++) {   // vertical case
+               try {
+                    if (Players.initialBoardPlayer2[row + i][column] == 1 &&
+                            Players.initialBoardPlayer2[row + 1][column] != 2) {
+                        return "Hit ";
+                    }
+               } catch (Exception ignored) {
+               }
+               try {
+                    if (Players.initialBoardPlayer2[row - i][column] == 1 &&
+                            Players.initialBoardPlayer2[row - 1][column] != 2) {
+                        return "Hit ";
+                    }
+               } catch (Exception ignored) {
+               }
+            }
+            for (int i = 1; i < 3; i++) {   // horizontal case
+                try {
+                    if (Players.initialBoardPlayer2[row][column - i] == 1 &&
+                            Players.initialBoardPlayer2[row][column - 1] != 2) {
+                        return "Hit ";
+                    }
+                } catch (Exception ignored) {
+                }
+                try {
+                    if (Players.initialBoardPlayer2[row][column + i] == 1 &&
+                            Players.initialBoardPlayer2[row][column + 1] != 2) {
+                        return "Hit ";
+                    }
+                } catch (Exception ignored) {
+                }
+            }
+        }
+        return "Sunk ";
+    }
+
+    public static void runOutOfTime() {
+
+        /*
+        Calling this method when timer equals 0 during the game
+         */
+
+        Utilities.setClickAllowance(false);
+        if (!turn2) {
+            Utilities.mishitsPlayer1++;
+        } else {
+            Utilities.mishitsPlayer2++;
+        }
+    }
+
+    public static void putScrollBarDown(TextArea textArea) {
+        textArea.selectEnd();
+        textArea.deselect();
+    }
+
+    public static void addStyleSheets(CheckBox checkBox) {
+        checkBox.getStylesheets().add(Utilities.class.getResource(
+                "../../stylefiles/checkBox.css").toExternalForm());
     }
 }

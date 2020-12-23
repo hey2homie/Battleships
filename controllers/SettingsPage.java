@@ -14,7 +14,7 @@ import static controllers.classes.Utilities.*;
 
 public class SettingsPage implements Initializable{
 
-    public static long mills;
+    public static int mills;
     public static String scoring;
     boolean timerSet = false;
     boolean scoringSet = false;
@@ -41,8 +41,10 @@ public class SettingsPage implements Initializable{
 
     @FXML
     private void toPlacement(ActionEvent event) throws IOException {
-        new Players(player1.getText(), player2.getText());
         boolean[] allSet = new boolean[3];
+
+        Players.namePlayer1 = player1.getText();
+        Players.namePlayer2 = player2.getText();
 
         // Check if all settings were applied
 

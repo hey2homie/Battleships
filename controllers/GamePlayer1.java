@@ -38,6 +38,12 @@ public class GamePlayer1 implements Initializable {
 
     @FXML
     private void toPlayer2Move(ActionEvent event) throws IOException {
+
+        /*
+        Checking if player has made a move or not. If so, checking whether or not all ships have sunk and if so, go to
+        the score screen.
+         */
+
         if (!Utilities.clickAllowance) {
             if (Players.HEALTH_PLAYER2 == 0) {
                 Utilities.winner = Players.getNamePlayer1();
@@ -53,17 +59,19 @@ public class GamePlayer1 implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        textArea.setText(Utilities.textPlayer2.getText());
+        textArea.setText(Utilities.textPlayer2.getText());  // Get history of moves
+        Utilities.putScrollBarDown(textArea);   // Put textArea to the bottom at the bottom when screen is turn on
         name.setText(Players.getNamePlayer1());
-        Utilities.newMove(pane, 1, timerLabel, timer);
-        gridPane.addEventFilter(MouseEvent.MOUSE_CLICKED, eventHandler);
+        Utilities.newMove(pane, 1, timerLabel, timer);  // Run timer, update grid pane with previous moves
+        gridPane.addEventFilter(MouseEvent.MOUSE_CLICKED, eventHandler);    // Clicks on the grid pane
     }
 
     EventHandler<MouseEvent> eventHandler = e -> {
-        textArea.setText(Utilities.textPlayer2.getText());
-        Node clickedNode = e.getPickResult().getIntersectedNode();
+        textArea.setText(Utilities.textPlayer2.getText());  // Without it after turn text doesn't display dynamically
+        Node clickedNode = e.getPickResult().getIntersectedNode();  // Understand where player clicked
+        Utilities.putScrollBarDown(textArea);
         if (clickedNode != gridPane) {
-            Utilities.clickEvent(gridPane, clickedNode, 1, textArea);
+            Utilities.clickEvent(gridPane, clickedNode, 1, textArea);   // Full click logic in this method
         }
     };
 }

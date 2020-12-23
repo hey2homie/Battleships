@@ -1,17 +1,22 @@
 package controllers.classes;
 
-import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.control.Label;
 import javafx.util.Duration;
 
+// TODO: Somehow move this to one of the Utilities methods
+
 public class Timing {
-    
-    long millis; 
+
+    /*
+    Self-explanatory I believe
+     */
+
+    int millis;
     Label timer;
 
-    public Timing(long millis) {
+    public Timing(int millis) {
         this.millis = millis;
     }
 
@@ -22,9 +27,7 @@ public class Timing {
     Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), e -> CountDown()));
 
     public void CountDown() {
-        if (millis == 0) {
-            millis = 0;
-        } else {
+        if (millis != 0) {
             millis -= 1000;
             if (Utilities.turn2) {
                 Utilities.timePlayer2 += 1;
@@ -33,10 +36,14 @@ public class Timing {
             }
         }
         timer.setText(String.valueOf(millis / 1000));
+        if (millis == 0) {
+            Utilities.runOutOfTime();
+            timeline.stop();
+        }
     }
 
     public void runTimer() {
-        timeline.setCycleCount(Animation.INDEFINITE);
+        timeline.setCycleCount(millis);
         timeline.playFromStart();
     }
 

@@ -10,9 +10,8 @@
             xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.ScorePage">
     <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0"
           prefWidth="1024.0" style="-fx-background-color: #d0b8ac;" xmlns="http://javafx.com/javafx/11.0.1">
-        <Button fx:id="mainMenu" alignment="CENTER" layoutX="215.0" layoutY="554.0" mnemonicParsing="false"
-                onAction="#mainMenu" prefHeight="108.0" prefWidth="607.0" style="-fx-background-color: null;"
-                text="Back to the main menu">
+        <Button fx:id="exit" alignment="CENTER" layoutX="209.0" layoutY="553.0" mnemonicParsing="false" onAction="#exit"
+                prefHeight="108.0" prefWidth="607.0" style="-fx-background-color: null;" text="Exit game">
             <font>
                 <Font name="Avenir Book" size="50.0" />
             </font>

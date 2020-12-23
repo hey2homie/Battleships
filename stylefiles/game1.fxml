@@ -5,10 +5,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.Pane?>
-<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1"
@@ -47,7 +44,8 @@
                 <Font name="Avenir Book" size="30.0" />
             </font>
         </Label>
-        <TextArea fx:id="textArea" editable="false" layoutX="689.0" layoutY="198.0" prefHeight="453.0" prefWidth="321.0" text=" " wrapText="true">
+        <TextArea fx:id="textArea" editable="false" layoutX="689.0" layoutY="198.0" prefHeight="453.0" prefWidth="321.0"
+                  text=" " wrapText="true">
             <font>
                 <Font name="Avenir Book" size="30.0" />
             </font>

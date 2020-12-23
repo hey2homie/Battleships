@@ -4,8 +4,10 @@ import javafx.scene.layout.GridPane;
 
 public class Players {
 
-    public static String namePlayer1 = null;
-    public static String namePlayer2 = null;
+    // TODO: This can be turned into enum within the Utilities class
+
+    public static String namePlayer1;
+    public static String namePlayer2;
 
     public static int HEALTH_PLAYER1 = 20;
     public static int HEALTH_PLAYER2 = 20;
@@ -26,11 +28,6 @@ public class Players {
 
     public static GridPane gameBoardPlayer1;
     public static GridPane gameBoardPlayer2;
-
-    public Players(String namePlayer1, String namePlayer2) {
-        Players.namePlayer1 = namePlayer1;
-        Players.namePlayer2 = namePlayer2;
-    }
 
     public static void takeDamagePlayer1() {
         Players.HEALTH_PLAYER1 -= 1;

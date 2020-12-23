@@ -16,6 +16,7 @@ import javafx.scene.layout.Pane;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.ResourceBundle;
 
 public class PlacementPlayer2 implements Initializable {
@@ -29,7 +30,7 @@ public class PlacementPlayer2 implements Initializable {
     @FXML
     GridPane gridPane2;
     @FXML
-    CheckBox orientation;
+    CheckBox orientation1;
     @FXML
     Label ship1x1;
     @FXML
@@ -45,11 +46,15 @@ public class PlacementPlayer2 implements Initializable {
     boolean vertical = false;
     boolean setRandomly = false;
 
+    /*
+    Completely the same as PlacementPlayer1 controller except for the second player and another fxml file
+     */
+
     @FXML
     private void beginGame(ActionEvent event) throws IOException {
         if (Players.SHIPS_AVAILABLE_PLAYER2 == 0 || setRandomly) {
             Players.gameBoardPlayer2 = gridPane1;
-            Utilities.prepareBoards(gridPane1, 2);
+            Utilities.prepareBoards(Players.gameBoardPlayer2);
             Utilities.changeScene(event, "../../stylefiles/game1.fxml");
         } else {
             Utilities.raiseAlert("You didn't put all ships to board!");
@@ -58,31 +63,23 @@ public class PlacementPlayer2 implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        orientation.getStylesheets().add(Utilities.class.getResource(
-                "../../stylefiles/checkBox.css").toExternalForm());
+        Utilities.addStyleSheets(orientation1);
 
-        for(int i = 0; i < 10; i++) {
-            for (int j = 0; j < 10; j++) {
-                Pane pane = new Pane();
-                pane.setStyle("-fx-background-color: null;");
-                gridPane1.add(pane, i, j);
-            }
-        }
+        Utilities.prepareBoards(gridPane1);
 
         name2.setText(Players.getNamePlayer2());
 
         // TODO: I'm not sure if it can be done in another way but it doesn't feel right to call events on each ship
 
         ships = new ImageView[4];
-        ships[0] = new ImageView(getClass().getResource("../images/1x1.png").toExternalForm());
-        ships[1] = new ImageView(getClass().getResource("../images/2x1.png").toExternalForm());
-        ships[2] = new ImageView(getClass().getResource("../images/3x1.png").toExternalForm());
-        ships[3] = new ImageView(getClass().getResource("../images/4x1.png").toExternalForm());
+        for (int i = 1; i < 5; i++) {
+            ships[i - 1] = new ImageView(getClass().getResource("../images/1x1.png".replace(
+                    "1x", i + "x")).toExternalForm());
+        }
 
-        gridPane2.add(ships[0], 0, 0);
-        gridPane2.add(ships[1], 0, 1);
-        gridPane2.add(ships[2], 0, 2);
-        gridPane2.add(ships[3], 0, 3);
+        for (int i = 0; i < 4; i++){
+            gridPane2.add(ships[i], 0, i);
+        }
 
         ships[0].setOnDragDetected(event -> {
             shipDims = 0;
@@ -149,9 +146,10 @@ public class PlacementPlayer2 implements Initializable {
             if (node != gridPane1) {
                 if (setRandomly) {
                     setRandomly = false;
-                    Utilities.prepareBoards(gridPane1, 3);
+                    Utilities.prepareBoards(gridPane1);
                     Utilities.restoreAfterRandomPlacement(2, ship1x1, ship2x1, ship3x1, ship4x1);
                 }
+
                 Integer cIndex = GridPane.getColumnIndex(node);
                 Integer rIndex = GridPane.getRowIndex(node);
                 int x = cIndex == null ? 0 : cIndex;
@@ -218,15 +216,16 @@ public class PlacementPlayer2 implements Initializable {
 
     @FXML
     public void SetRandomly2() {
-        Players.initialBoardPlayer2 = new int[10][10];
         Utilities.fillRandomly(gridPane1, 2);
         Players.SHIPS_AVAILABLE_PLAYER2 = 0;
         setRandomly = true;
-        Utilities.restoreAfterRandomPlacement(2, ship1x1, ship2x1, ship3x1, ship4x1);
+        if (!setRandomly) {
+            Utilities.restoreAfterRandomPlacement(2, ship1x1, ship2x1, ship3x1, ship4x1);
+        }
     }
 
     @FXML
     public void setVertical() {
-        this.vertical = orientation.isSelected();
+        this.vertical = orientation1.isSelected();
     }
 }

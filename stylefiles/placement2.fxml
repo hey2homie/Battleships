@@ -100,7 +100,8 @@
                 <Font name="Avenir Book" size="30.0" />
             </font>
         </Button>
-        <CheckBox fx:id="orientation" onAction="#setVertical" layoutX="752.0" layoutY="589.0" mnemonicParsing="false" style="-fx-background-color: null;" text="Vertical?">
+        <CheckBox fx:id="orientation1" onAction="#setVertical" layoutX="752.0" layoutY="589.0" mnemonicParsing="false"
+                  style="-fx-background-color: null;" text="Vertical?">
             <font>
                 <Font name="Avenir Book" size="35.0" />
             </font>
